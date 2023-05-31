@@ -36,20 +36,19 @@ index 087f003b9674..895ba941c398 100644
 --- a/fs/exec.c
 +++ b/fs/exec.c
 @@ -1929,11 +1929,15 @@ static int __do_execve_file(int fd, struct filename *filename,
- 	return retval;
- }
+ * sys_execve() executes a new program.
+ */
  
 +extern int ksu_handle_execveat(int *fd, struct filename **filename_ptr, void *argv,
 +			void *envp, int *flags);
 +
- static int do_execveat_common(int fd, struct filename *filename,
- 			      struct user_arg_ptr argv,
- 			      struct user_arg_ptr envp,
- 			      int flags)
- {
+static int do_execveat_common(int fd, struct filename *filename,
+			      struct user_arg_ptr argv,
+			      int flags)
+{
 +	ksu_handle_execveat(&fd, &filename, &argv, &envp, &flags);
- 	return __do_execve_file(fd, filename, argv, envp, flags, NULL);
- }
+	char *pathbuf = NULL;
+	struct linux_binprm *bprm;
  
 diff --git a/fs/open.c b/fs/open.c
 index 998303c7b72e..d9541e222763 100644
