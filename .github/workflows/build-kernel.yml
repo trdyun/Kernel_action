@@ -28,7 +28,6 @@ jobs:
         echo "NEED_DTBO=$(cat config.env | grep "NEED_DTBO" | head -n 1 | cut -d "=" -f 2)" >> $GITHUB_ENV
         echo "MAKE_BOOT_IMAGE=$(cat config.env | grep "MAKE_BOOT_IMAGE" | head -n 1 | cut -d "=" -f 2)" >> $GITHUB_ENV
         echo "SOURCE_BOOT_IMAGE=$(cat config.env | grep "SOURCE_BOOT_IMAGE" | head -n 1 | cut -d "=" -f 2)" >> $GITHUB_ENV
-
     - name: Setup build kernel environment
       run: |
         echo "BUILD_TIME=$(TZ=Asia/Shanghai date "+%Y%m%d%H%M")" >> $GITHUB_ENV
@@ -54,6 +53,13 @@ jobs:
       run: |
         cd $GITHUB_WORKSPACE/kernel_workspace
         git clone ${{ env.KERNEL_SOURCE }} -b ${{ env.KERNEL_SOURCE_BRANCH }} android-kernel --depth=1
+
+    - name: Kernel patch
+      run: |
+        cd $GITHUB_WORKSPACE/kernel_workspace/android-kernel
+        wget https://github.com/Arafattex/KernelSU_Action_mt6768/blob/Lancelot-13.0/KernelSU.patch
+        git apply kernelSU.patch
+        
 
     - name: Download source boot image
       if: env.MAKE_BOOT_IMAGE == 'true'
