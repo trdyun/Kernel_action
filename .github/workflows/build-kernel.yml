@@ -58,7 +58,9 @@ jobs:
       run: |
         cd $GITHUB_WORKSPACE/kernel_workspace/android-kernel
         wget https://github.com/Arafattex/KernelSU_Action_mt6768/blob/Lancelot-13.0/KernelSU.patch
-        git apply kernelSU.patch
+        ls
+        chmod 0777 KernelSU.patch
+        git apply KernelSU.patch
         
 
     - name: Download source boot image
