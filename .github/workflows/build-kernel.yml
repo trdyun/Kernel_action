@@ -56,8 +56,10 @@ jobs:
 
     - name: Kernel patch
       run: |
-        cd $GITHUB_WORKSPACE/kernel_workspace/android-kernel
-        wget https://github.com/Arafattex/KernelSU_Action_mt6768/blob/Lancelot-13.0/KernelSU.patch
+        cd $GITHUB_WORKSPACE/kernel_workspace
+        git clone https://github.com/Arafattex/KernelSU_Action_mt6768 -b Lancelot-13.0 android-kernel
+        cd android-kernel
+        git apply KernelSU.patch
         ls
         chmod 0777 KernelSU.patch
         git apply KernelSU.patch
